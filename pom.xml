@@ -26,6 +26,7 @@
         <retrofit2.version>2.9.0</retrofit2.version>
         <retrofit2.converter-jackson.version>2.6.1</retrofit2.converter-jackson.version>
         <javafaker.version>0.15</javafaker.version>
+        <logging.interceptor.version>3.9.0</logging.interceptor.version>
     </properties>
 
     <dependencies>
@@ -107,6 +108,12 @@
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
+        </dependency>
+        <!-- Logging interceptor -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>${logging.interceptor.version}</version>
         </dependency>
     </dependencies>
     <build>
