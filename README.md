@@ -17,9 +17,9 @@
 8) Modify product from Electronic category to Furniture category test - проверка изменения продукта с категорией "Electronic"
 9) Modify product from Furniture category to Food category test - проверка изменения продукта с категорией "Furniture"
 
-## `GetProductsTest` - проверка получения продуктов
+## `GetProductsTest` - проверка получения продуктов при запросе к `product-controller`:
 10) Get all products test - проверка получения массива всех продуктов
 11) Get product on Id test - проверка получения продукта по Id
 
-## `DeleteProduct` - проверка удаления продуктов по id
+## `DeleteProduct` - проверка удаления продуктов по id при запросе к `product-controller`:
 12) Delete product on Id test - проверка удаления продукта по id
