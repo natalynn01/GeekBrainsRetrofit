@@ -32,7 +32,7 @@ public class GetCategoryTest {
     @SneakyThrows
     @Test
     void getFoodCategoryPositiveTest() {
-        createProductAndCheckResponse(1, "Food");
+        getProductsOnCategoryAndCheckResponse(1, "Food");
     }
 
     @DisplayName("Test_case_2. Categories test for Electronic.")
@@ -41,7 +41,7 @@ public class GetCategoryTest {
     @SneakyThrows
     @Test
     void getElectronicCategoryPositiveTest() {
-        createProductAndCheckResponse(2, "Electronic");
+        getProductsOnCategoryAndCheckResponse(2, "Electronic");
     }
 
     @DisplayName("Test_case_3. Categories test for Furniture.")
@@ -50,12 +50,12 @@ public class GetCategoryTest {
     @SneakyThrows
     @Test
     void getFurnitureCategoryPositiveTest() {
-        createProductAndCheckResponse(3, "Furniture");
+        getProductsOnCategoryAndCheckResponse(3, "Furniture");
     }
 
     @SneakyThrows
     @Step("Get list of products with category id={0} and category name={1}")
-    void createProductAndCheckResponse(int categoryId, String categoryName) {
+    void getProductsOnCategoryAndCheckResponse(int categoryId, String categoryName) {
         Response<GetCategoryResponse> response = categoryService.getCategory(categoryId).execute();
         assertThat(response.isSuccessful(), CoreMatchers.is(true));
         assertThat(response.body().getId(), equalTo(categoryId));
