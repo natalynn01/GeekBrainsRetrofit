@@ -27,6 +27,9 @@
         <retrofit2.converter-jackson.version>2.6.1</retrofit2.converter-jackson.version>
         <javafaker.version>0.15</javafaker.version>
         <logging.interceptor.version>3.9.0</logging.interceptor.version>
+        <org.postgresql.version>42.2.18</org.postgresql.version>
+        <org.mybatis.version>3.5.6</org.mybatis.version>
+        <org.mybatis.generator.plugin.version>1.4.0</org.mybatis.generator.plugin.version>
     </properties>
 
     <dependencies>
@@ -115,6 +118,17 @@
             <artifactId>logging-interceptor</artifactId>
             <version>${logging.interceptor.version}</version>
         </dependency>
+        <!-- Mybatis ORM -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${org.mybatis.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -181,6 +195,34 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            <!--   it  is used for DB objects (dao, mappers) generation    -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${org.mybatis.generator.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>Generate MyBatis Artifacts</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>
