@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @With

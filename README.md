@@ -1,6 +1,8 @@
 # GeekBrainsRetrofit
-для запуска тестов и автоматического открытия отчета в браузере необходимо выполнить команду `mvn clean test -Durl=Base_URL allure:serve` где 
+для запуска тестов и автоматического открытия отчета в браузере необходимо выполнить команду `mvn clean test -Durl=Base_URL -DdbUsername=DB_User -DdbPassword=DB_PASS allure:serve` где 
 `Base_URL` - адрес тестируемого приложения
+`DB_USER` - логин пользователя БД
+`DB_PASS` - пароль пользователя БД
 
 ## `GetCategoryTest` - проверка получения продуктов определенной категории при запросе к `category-controller`:
 1) Categories test for Food - проверка получения продуктов с категорией "Food"

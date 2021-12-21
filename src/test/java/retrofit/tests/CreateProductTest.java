@@ -1,15 +1,19 @@
 package retrofit.tests;
 
 import com.github.javafaker.Faker;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import lombok.SneakyThrows;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.*;
 import retrofit2.Response;
+import ru.retrofit.db.mapper.ProductsMapper;
+import ru.retrofit.db.model.Products;
 import ru.retrofit.dto.Product;
 import ru.retrofit.enums.CategoryType;
 import ru.retrofit.service.ProductService;
+import ru.retrofit.utils.DbMapperFactory;
 import ru.retrofit.utils.RetrofitUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,13 +23,15 @@ import static org.hamcrest.Matchers.equalTo;
 @Tag("CreateProduct")
 public class CreateProductTest {
     static ProductService productService;
-    static Faker faker = new Faker();
+    static ProductsMapper productsMapper;
+    static Faker faker;
     int productId;
 
     @BeforeAll
     static void beforeAll() {
-        productService = RetrofitUtils.getRetrofit()
-                .create(ProductService.class);
+        productService = RetrofitUtils.getRetrofit().create(ProductService.class);
+        productsMapper = DbMapperFactory.getDbMapper(ProductsMapper.class);
+        faker = new Faker();
     }
 
     @DisplayName("Test_case_4. Create a new product with Food category test.")
@@ -34,10 +40,17 @@ public class CreateProductTest {
     @SneakyThrows
     @Test
     void postCreateFoodProductTest(){
-        productId = createProductAndCheckResponse(new Product()
-                .withTitle(faker.food().ingredient())
-                .withCategoryTitle(CategoryType.FOOD.getTitle())
-                .withPrice((int) ((Math.random() + 1) * 17)));
+        var productTitle = faker.food().ingredient();
+        var price = (int) ((Math.random() + 1) * 17);
+
+        productId = createProductAndCheckResponse(
+                new Product()
+                        .withTitle(productTitle)
+                        .withCategoryTitle(CategoryType.FOOD.getTitle())
+                        .withPrice(price)
+        );
+
+        checkProductDbEntry( 1L ,productTitle, price);
     }
 
     @DisplayName("Test_case_5. Create a new product with Electronic category test.")
@@ -46,10 +59,17 @@ public class CreateProductTest {
     @SneakyThrows
     @Test
     void postCreateElectronicProductTest(){
-        productId = createProductAndCheckResponse(new Product()
-                .withTitle(faker.ancient().hero())
-                .withCategoryTitle(CategoryType.ELECTRONIC.getTitle())
-                .withPrice((int) ((Math.random() + 2) * 18)));
+        var productTitle = faker.ancient().hero();
+        var price = (int) ((Math.random() + 2) * 18);
+
+        productId = createProductAndCheckResponse(
+                new Product()
+                        .withTitle(productTitle)
+                        .withCategoryTitle(CategoryType.ELECTRONIC.getTitle())
+                        .withPrice(price)
+        );
+
+        checkProductDbEntry(2L, productTitle, price);
     }
 
     @DisplayName("Test_case_6. Create a new product with Furniture category test.")
@@ -58,10 +78,17 @@ public class CreateProductTest {
     @SneakyThrows
     @Test
     void postCreateFurnitureProductTest(){
-        productId = createProductAndCheckResponse(new Product()
-                .withTitle(faker.gameOfThrones().house())
-                .withCategoryTitle(CategoryType.FURNITURE.getTitle())
-                .withPrice((int) ((Math.random() + 3) * 19)));
+        var productTitle = faker.gameOfThrones().house();
+        var price = (int) ((Math.random() + 3) * 19);
+
+        productId = createProductAndCheckResponse(
+                new Product()
+                        .withTitle(productTitle)
+                        .withCategoryTitle(CategoryType.FURNITURE.getTitle())
+                        .withPrice(price)
+        );
+
+        checkProductDbEntry(3L, productTitle, price);
     }
 
     @SneakyThrows
@@ -78,6 +105,16 @@ public class CreateProductTest {
         assertThat(response.body().getTitle(), equalTo(product.getTitle()));
         assertThat(response.body().getCategoryTitle(), equalTo(product.getCategoryTitle()));
         assertThat(response.body().getPrice(), equalTo(product.getPrice()));
+        Allure.addAttachment("Response body", response.body().toString());
         return response.body().getId();
+    }
+
+    @Step("Check DB entry with CategoryId={0}, Title={1}, Price={2}")
+    void checkProductDbEntry(long productCategoryId ,String productTitle, int price) {
+        Products product = productsMapper.selectByPrimaryKey((long) productId);
+        Allure.addAttachment("Product", product.toString());
+        assertThat(product.getTitle(), equalTo(productTitle));
+        assertThat(product.getCategory_id(), equalTo(productCategoryId));
+        assertThat(product.getPrice(), equalTo(price));
     }
 }

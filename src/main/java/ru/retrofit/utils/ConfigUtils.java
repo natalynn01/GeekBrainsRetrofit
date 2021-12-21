@@ -1,33 +1,41 @@
 package ru.retrofit.utils;
 
-import lombok.SneakyThrows;
+import lombok.Data;
 import lombok.experimental.UtilityClass;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 @UtilityClass
+@Data
 public class ConfigUtils {
-    Properties prop = new Properties();
-    private static InputStream configFile;
+    private final String PATH_TO_PROPERTIES = "src/test/resources/application.properties";
+    private Properties properties = new Properties();
+    private String dbUsername = System.getProperty("dbUsername");
+    private String dbPassword = System.getProperty("dbPassword");
 
     static {
         try {
-            configFile = new FileInputStream("src/test/resources/application.properties");
-        } catch (FileNotFoundException e) {
+            properties.load(new FileInputStream(PATH_TO_PROPERTIES));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @SneakyThrows
     public String getBaseUrl() {
         String url = System.getProperty("url");
         if (url == null) {
-            prop.load(configFile);
-            url = prop.getProperty("url");
+            url = properties.getProperty("url");
         }
         return url;
+    }
+
+    public static Properties getProperties() {
+        if (!(dbUsername == null) && !(dbPassword == null)) {
+            properties.setProperty("dbUsername", dbUsername);
+            properties.setProperty("dbPassword", dbPassword);
+        }
+        return properties;
     }
 }
